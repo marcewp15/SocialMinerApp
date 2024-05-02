@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block header %}
+  <h1>{% block title %}SocialMiner Searcher{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h1>SocialMiner Searcher</h1>
+    <form action="/searcher" method="post">
+        <input type="text" name="term" placeholder="Ingrese término de búsqueda">
+        <button type="submit">Buscar</button>
+    </form>
+{% endblock %}
