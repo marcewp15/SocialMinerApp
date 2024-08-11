@@ -25,7 +25,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @app.route('/')
+    @app.route('/home')
     def index():
         if 'user_id' in session:
             return redirect(url_for('home.index'))
