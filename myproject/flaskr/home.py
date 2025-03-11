@@ -28,30 +28,55 @@ def searcher():
 
 def search_x(term):
     results = []
-    #try:
-        # Inicializar el controlador de Chrome
+    
+    USERNAME = "socialminer035"
+    PASSWORD = "Proyecto2025/*"
+    
+    "try:"
+    # Inicializar el controlador de Chrome
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
     driver = webdriver.Chrome(options=options)
 
-        # Abrir Twitter
-    driver.get("https://twitter.com/")
+    # Abrir Twitter
+    driver.get("https://x.com/")
     driver.maximize_window()
     driver.execute_script("window.focus();")
-
-    WebDriverWait(driver, 10).until(
+    
+    WebDriverWait(driver, 50).until(
             EC.presence_of_element_located((By.XPATH, '//a[@data-testid="loginButton"]'))
         )
+    buttonHome = driver.find_element(By.XPATH, value="//a[@data-testid='loginButton']")
+    buttonHome.click()
     
-    buttonCloseWelcome = driver.find_element(by=By.XPATH, value="//button[@data-testid='xMigrationBottomBar']")
-    buttonCloseWelcome.click()
-
-    buttonLogin = driver.find_element(by=By.XPATH, value="//a[@data-testid='loginButton']")
-    buttonLogin.click()
-
-    WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//input[@aria-label="Buscar en Twitter"]'))
+    # Iniciar sesion
+    input_user = WebDriverWait(driver, 50).until(
+            EC.presence_of_element_located((By.XPATH, '//input[@name="text"]'))
         )
+    input_user = driver.find_element(By.XPATH, '//input[@name="text"]')
+    input_user.send_keys(USERNAME)    
+
+    buttonext = driver.find_element (By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/button[2]')
+    buttonext.click()
+    
+    input_pass = WebDriverWait(driver, 50).until(
+        EC.presence_of_element_located((By.XPATH, '//input[@name="password"]'))
+    )
+    input_pass = driver.find_element (By.XPATH, '//input[@name="password"]')
+    input_pass.send_keys(PASSWORD)
+    
+    buttonLogin = driver.find_element(By.XPATH, value="//button[@data-testid='LoginForm_Login_Button']")
+    buttonLogin.click()
+    
+
+    ''''
+    buttonCloseWelcome = driver.find_element(By.XPATH, value="//a[@data-testid="loginButton"]")
+    buttonCloseWelcome.click()
+    
+    buttonCloseWelcome = driver.find_element(By.XPATH, value="//button[@data-testid='xMigrationBottomBar']")
+    buttonCloseWelcome.click()
+    '''
+    
     # Encontrar el campo de búsqueda
     search_box = driver.find_element_by_xpath('//input[@aria-label="Buscar en Twitter"]')
 
@@ -61,6 +86,10 @@ def search_x(term):
 
     WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//div[@data-testid="tweet"]'))
+        )
+    
+    WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//a[@data-testid=loginButton"]'))
         )
     # Recopilar los resultados de la búsqueda
     
