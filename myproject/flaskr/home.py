@@ -59,6 +59,8 @@ def search_x(term):
     buttonext = driver.find_element (By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/button[2]')
     buttonext.click()
     
+    #Ingresar contraseña
+    
     input_pass = WebDriverWait(driver, 50).until(
         EC.presence_of_element_located((By.XPATH, '//input[@name="password"]'))
     )
@@ -68,7 +70,15 @@ def search_x(term):
     buttonLogin = driver.find_element(By.XPATH, value="//button[@data-testid='LoginForm_Login_Button']")
     buttonLogin.click()
     
-
+    #Campo de Busqueda
+    search_box = WebDriverWait(driver,10).until(
+        EC.presence_of_element_located((By.XPATH, '//input[@data-testid="SearchBox_Search_Input"]'))
+    )
+    search_box = driver.find_element (By.XPATH, value='//input[@data-testid="SearchBox_Search_Input"]')
+    search_box.send_keys(term)
+    search_box.send_keys(Keys.RETURN)
+    
+    
     ''''
     buttonCloseWelcome = driver.find_element(By.XPATH, value="//a[@data-testid="loginButton"]")
     buttonCloseWelcome.click()
@@ -91,6 +101,7 @@ def search_x(term):
     WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//a[@data-testid=loginButton"]'))
         )
+    
     # Recopilar los resultados de la búsqueda
     
     tweets = driver.find_elements(By.XPATH, '//div[@data-testid="tweet"]')
