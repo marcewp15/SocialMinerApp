@@ -93,14 +93,29 @@ def search_x(term):
     # Escribir el término de búsqueda y presionar Enter
     search_box.send_keys(term)
     search_box.send_keys(Keys.RETURN)
-
-    WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//div[@data-testid="tweet"]'))
-        )
     
-    WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//a[@data-testid=loginButton"]'))
+    # Seleccionar pagina recientes
+    #sleep (3)
+    #latest = driver.find_element(By.XPATH, "//span[contains(text(), 'Latest')]")
+    #latest.click()
+    
+    latest = WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.XPATH, '//span[contains(text(), "Latest"]'))
         )
+    latest = driver.find_element(By.XPATH, value= '//span[contains(text(), "Latest"]')
+    latest.click()    
+    
+    user = driver.find_element(By.XPATH, '//div[@data-testid="User-Name"]').text
+    tweet = driver.find_element(By.XPATH, '//div[@data-testid="tweetText"]').text
+    date = driver.find_element(By.XPATH, './/time').get_attribute('datetime')
+
+    #WebDriverWait(driver, 10).until(
+     #       EC.presence_of_element_located((By.XPATH, '//div[@data-testid="tweet"]'))
+       # )
+    
+    #WebDriverWait(driver, 10).until(
+     #       EC.presence_of_element_located((By.XPATH, '//a[@data-testid=loginButton"]'))
+      #  )#
     
     # Recopilar los resultados de la búsqueda
     
