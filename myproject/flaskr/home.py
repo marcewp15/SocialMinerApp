@@ -11,6 +11,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
+from dotenv import load_dotenv
+import os
+
+#Carga las variables de entorno
+load_dotenv()
 
 bp = Blueprint('home', __name__)
 
@@ -29,8 +34,8 @@ def searcher():
 def search_x(term):
     results = []
     
-    USERNAME = "socialminer035"
-    PASSWORD = "Proyecto2025/*"
+    USERNAME = os.getenv("TWITTER_USERNAME")
+    PASSWORD = os.getenv("TWITTER_PASSWORD")
     
     "try:"
     # Inicializar el controlador de Chrome
@@ -54,7 +59,7 @@ def search_x(term):
             EC.presence_of_element_located((By.XPATH, '//input[@name="text"]'))
         )
     input_user = driver.find_element(By.XPATH, '//input[@name="text"]')
-    input_user.send_keys(USERNAME)    
+    input_user.send_keys(USERNAME)
 
     buttonext = driver.find_element (By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/button[2]')
     buttonext.click()
