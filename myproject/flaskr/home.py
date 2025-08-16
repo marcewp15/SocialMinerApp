@@ -33,6 +33,7 @@ def searcher():
 
 def search_x(term):
     results = []
+    print(f"[INFO] Iniciando busqueda en X para la palabra :{term}")
     
     USERNAME = os.getenv("TWITTER_USERNAME")
     PASSWORD = os.getenv("TWITTER_PASSWORD")
@@ -47,12 +48,14 @@ def search_x(term):
     driver.get("https://x.com/")
     driver.maximize_window()
     driver.execute_script("window.focus();")
+    print("[INFO] Pagina de inicio de sesion en X cargada.")
     
     WebDriverWait(driver, 50).until(
             EC.presence_of_element_located((By.XPATH, '//a[@data-testid="loginButton"]'))
         )
     buttonHome = driver.find_element(By.XPATH, value="//a[@data-testid='loginButton']")
     buttonHome.click()
+    print("[OK] Boton de login encontrado y selecionado.")
     
     # Iniciar sesion
     input_user = WebDriverWait(driver, 50).until(
@@ -60,6 +63,7 @@ def search_x(term):
         )
     input_user = driver.find_element(By.XPATH, '//input[@name="text"]')
     input_user.send_keys(USERNAME)
+    print("[OK] Cuenta usuario ingresado.")
 
     buttonext = driver.find_element (By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/button[2]')
     buttonext.click()
@@ -71,18 +75,22 @@ def search_x(term):
     )
     input_pass = driver.find_element (By.XPATH, '//input[@name="password"]')
     input_pass.send_keys(PASSWORD)
+    print("[OK] Contraseña de usuario ingresada.")
     
     buttonLogin = driver.find_element(By.XPATH, value="//button[@data-testid='LoginForm_Login_Button']")
     buttonLogin.click()
+    print("[OK] Sesion iniciada.")
     
     #Campo de Busqueda
     search_box = WebDriverWait(driver,10).until(
         EC.presence_of_element_located((By.XPATH, '//input[@data-testid="SearchBox_Search_Input"]'))
     )
+    #Encontrar el campo de búsqueda
     search_box = driver.find_element (By.XPATH, value='//input[@data-testid="SearchBox_Search_Input"]')
+    # Escribir el término de búsqueda y presionar Enter
     search_box.send_keys(term)
     search_box.send_keys(Keys.RETURN)
-    
+    print(f"[INFO] Realizando busqueda con la palabra:{term}")
     
     ''''
     buttonCloseWelcome = driver.find_element(By.XPATH, value="//a[@data-testid="loginButton"]")
@@ -93,11 +101,11 @@ def search_x(term):
     '''
     
     # Encontrar el campo de búsqueda
-    search_box = driver.find_element_by_xpath('//input[@aria-label="Buscar en Twitter"]')
+    #search_box = driver.find_element_by_xpath('//input[@aria-label="Buscar en Twitter"]')
 
     # Escribir el término de búsqueda y presionar Enter
-    search_box.send_keys(term)
-    search_box.send_keys(Keys.RETURN)
+    #search_box.send_keys(term)
+    #search_box.send_keys(Keys.RETURN)
     
     # Seleccionar pagina recientes
     #sleep (3)
@@ -109,7 +117,9 @@ def search_x(term):
         )
     latest = driver.find_element(By.XPATH, value= '//span[contains(text(), "Latest"]')
     latest.click()    
+    print("[OK] Sección 'Recientes' abierta.") 
     
+     
     user = driver.find_element(By.XPATH, '//div[@data-testid="User-Name"]').text
     tweet = driver.find_element(By.XPATH, '//div[@data-testid="tweetText"]').text
     date = driver.find_element(By.XPATH, './/time').get_attribute('datetime')
