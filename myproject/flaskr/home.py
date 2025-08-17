@@ -109,18 +109,24 @@ def search_x(term):
     
     # Seleccionar pagina recientes
     #sleep (3)
-    #latest = driver.find_element(By.XPATH, "//span[contains(text(), 'Latest')]")
-    #latest.click()
-    
     latest = WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.XPATH, '//span[contains(text(), "Latest"]'))
-        )
-    latest = driver.find_element(By.XPATH, value= '//span[contains(text(), "Latest"]')
-    latest.click()    
-    print("[OK] Sección 'Recientes' abierta.") 
+        EC.presence_of_element_located((By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div[2]/nav/div/div[2]/div/div[2]/a/div/div'))
+    )
+    latest = driver.find_element (By.XPATH,'//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div[2]/nav/div/div[2]/div/div[2]/a/div/div')
+    latest.click()
+    print("[OK] Selección pestaña 'Recientes' abierta.") 
     
-     
+    #latest = WebDriverWait(driver, 20).until(
+    #       EC.presence_of_element_located((By.XPATH, '//span[contains(text(), "Latest"]'))
+    #   )
+    #latest = driver.find_element(By.XPATH, value= '//span[contains(text(), "Latest"]')
+    #latest.click()    
+    #print("[OK] Sección 'Recientes' abierta.") 
+    
+    
     user = driver.find_element(By.XPATH, '//div[@data-testid="User-Name"]').text
+    print(user)
+    
     tweet = driver.find_element(By.XPATH, '//div[@data-testid="tweetText"]').text
     date = driver.find_element(By.XPATH, './/time').get_attribute('datetime')
 
