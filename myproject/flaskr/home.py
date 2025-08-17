@@ -98,37 +98,63 @@ def search_x(term):
     
     buttonCloseWelcome = driver.find_element(By.XPATH, value="//button[@data-testid='xMigrationBottomBar']")
     buttonCloseWelcome.click()
-    '''
-    
-    # Encontrar el campo de búsqueda
-    #search_box = driver.find_element_by_xpath('//input[@aria-label="Buscar en Twitter"]')
-
-    # Escribir el término de búsqueda y presionar Enter
-    #search_box.send_keys(term)
-    #search_box.send_keys(Keys.RETURN)
-    
+    '''     ''''
     # Seleccionar pagina recientes
-    #sleep (3)
+    #latest = WebDriverWait(driver, 20).until(
+     #   EC.presence_of_element_located((By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div[2]/nav/div/div[2]/div/div[2]/a/div/div'))
+    #)
+    #latest = driver.find_element (By.XPATH,'//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div[2]/nav/div/div[2]/div/div[2]/a/div/div')
+    #latest.click()
+    #print("[OK] Selección pestaña 'Recientes' abierta.") 
+     '''
+    # Seleccionar pagina recientes
     latest = WebDriverWait(driver, 20).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div[2]/nav/div/div[2]/div/div[2]/a/div/div'))
-    )
-    latest = driver.find_element (By.XPATH,'//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div[2]/nav/div/div[2]/div/div[2]/a/div/div')
-    latest.click()
+           EC.presence_of_element_located((By.XPATH, '//span[contains(text(),"Latest")]/ancestor::a'))
+       )
+    latest = driver.find_element(By.XPATH, value= '//span[contains(text(),"Latest")]/ancestor::a')
+    latest.click()    
     print("[OK] Selección pestaña 'Recientes' abierta.") 
     
-    #latest = WebDriverWait(driver, 20).until(
-    #       EC.presence_of_element_located((By.XPATH, '//span[contains(text(), "Latest"]'))
-    #   )
-    #latest = driver.find_element(By.XPATH, value= '//span[contains(text(), "Latest"]')
-    #latest.click()    
-    #print("[OK] Sección 'Recientes' abierta.") 
-    
-    
-    user = driver.find_element(By.XPATH, '//div[@data-testid="User-Name"]').text
-    print(user)
-    
+    #Seleccionar usuario
+    ''''
+    UserTag = WebDriverWait(driver,20).until(
+        EC.presence_of_element_located((By.XPATH, '//div[@data-testid="User-Name"]//a//span'))
+    ).text
+    UserTag = driver.find_element(By.XPATH, '//div[@data-testid="User-Name"]//a//span').text
+    print("Usuario:", UserTag )
     tweet = driver.find_element(By.XPATH, '//div[@data-testid="tweetText"]').text
     date = driver.find_element(By.XPATH, './/time').get_attribute('datetime')
+    '''
+    try:
+        tweets = WebDriverWait(driver,20).until(
+        EC.presence_of_all_elements_located((By.XPATH, '//div[@data-testid="tweetText"]'))
+    )
+        print(f"[INFO] Se encontraron {len(tweets)} tweets.")
+    
+        for tweet in tweets [:10]:
+            try:
+                user = driver.find_element(By.XPATH, '//div[@data-testid="User-Name"]').text
+                text = driver.find_element(By.XPATH, '//div[@data-testid="tweetText"]').text
+                date = driver.find_element(By.XPATH, './/time').get_attribute('datetime')
+            
+                results.append({'user':user, 'text': text, 'date': date})
+            
+            except Exception as e:
+                print("[WARN] No se pudo extraer un tweet:", e)
+                
+    except Exception as e:
+        print("[ERROR] Nose encontraron tweets:", e )
+    
+    #Guardar
+    try:
+        with open("tweets_resultados.txt", "w", encoding="utf-8") as f:
+            for r in results:
+                f.write(f"usuario: {r['user']}\nfecha:{r['date']}\nTweet: {r['text']}\n\n")
+            print ("[OK] RESULTADOS GUARDADOS EN TWEETS_RESULTADOS.TXT")
+    except Exception as e:
+        print ("[ERROR] Ocurrio un problema al guardar:", e)
+            
+        
 
     #WebDriverWait(driver, 10).until(
      #       EC.presence_of_element_located((By.XPATH, '//div[@data-testid="tweet"]'))
@@ -139,14 +165,14 @@ def search_x(term):
       #  )#
     
     # Recopilar los resultados de la búsqueda
-    
+    ''''
     tweets = driver.find_elements(By.XPATH, '//div[@data-testid="tweet"]')
     for tweet in tweets:
             user = tweet.find_element(By.XPATH, './/span[contains(@class, "css-901oao css-16my406")]').text
             text = tweet.find_element(By.XPATH, './/div[contains(@class, "css-901oao r-18jsvk2 r-1tl8opc r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0")]').text
             date = tweet.find_element(By.XPATH, './/time').get_attribute('datetime')
             results.append({'user': user, 'text': text, 'date': date})
-
+    '''
 #except NoSuchElementException as e:
     # Manejar excepciones y errores
 #    print("Error: Elemento no encontrado:", e)
