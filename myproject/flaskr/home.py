@@ -134,10 +134,13 @@ def search_x(term):
         for tweet in tweets [:10]:
             try:
                 user = driver.find_element(By.XPATH, '//div[@data-testid="User-Name"]').text
+                results.append(user)
                 text = driver.find_element(By.XPATH, '//div[@data-testid="tweetText"]').text
+                results.append(text)
                 date = driver.find_element(By.XPATH, './/time').get_attribute('datetime')
+                results.append(date)
             
-                results.append({'user':user, 'text': text, 'date': date})
+                "results.append({'user':user, 'text': text, 'date': date})"
             
             except Exception as e:
                 print("[WARN] No se pudo extraer un tweet:", e)
@@ -154,7 +157,50 @@ def search_x(term):
     except Exception as e:
         print ("[ERROR] Ocurrio un problema al guardar:", e)
             
-        
+    #################
+    users=[]
+    texts=[]
+    dates=[]
+    tweets = driver.find_elements(By.XPATH, '//div[@data-testid="tweetText"]')
+    print(f"[INFO] Se encontraron {len(tweets)} tweets.")
+while True:
+    for tweet in tweets :
+            user = driver.find_element(By.XPATH, './/div[@data-testid="User-Name"]').text
+            users.append(user)
+            text = driver.find_element(By.XPATH, './/div[@data-testid="tweetText"]').text
+            texts.append(text)
+            date = driver.find_element(By.XPATH, './/time').get_attribute('datetime')
+            dates.append(date)
+    driver.execute_script('window.scrollTo(0,document.body.scrollHeight);')
+    tweets = driver.find_elements(By.XPATH, '//div[@data-testid="tweetText"]')
+    texts2 = list(set(tweets))
+    if len(texts2) > 5:
+        break
+print(len(users),
+     len(texts),
+     len(dates))
+
+import pandas as pd
+
+df = pd.DataFrame(zip(users, texts, dates)
+                  ,columns=['users','texts','dates'])
+df.head()
+
+df.to_excel(r"C:\Users\aleja\Documents\PROYECTO GRADO\resultados.txt", index=False)
+import os
+os.system('start "excel""C:\Users\aleja\Documents\PROYECTO GRADO" ')
+       
+                
+''''
+    #Guardar
+    try:
+        with open("tweets_resultados.txt", "w", encoding="utf-8") as f:
+            for r in results:
+                f.write(f"usuario: {r['user']}\nfecha:{r['date']}\nTweet: {r['text']}\n\n")
+            print ("[OK] RESULTADOS GUARDADOS EN TWEETS_RESULTADOS.TXT")
+    except Exception as e:
+        print ("[ERROR] Ocurrio un problema al guardar:", e)
+'''
 
     #WebDriverWait(driver, 10).until(
      #       EC.presence_of_element_located((By.XPATH, '//div[@data-testid="tweet"]'))
@@ -165,7 +211,7 @@ def search_x(term):
       #  )#
     
     # Recopilar los resultados de la búsqueda
-    ''''
+''''
     tweets = driver.find_elements(By.XPATH, '//div[@data-testid="tweet"]')
     for tweet in tweets:
             user = tweet.find_element(By.XPATH, './/span[contains(@class, "css-901oao css-16my406")]').text
@@ -177,6 +223,5 @@ def search_x(term):
     # Manejar excepciones y errores
 #    print("Error: Elemento no encontrado:", e)
 #finally:
-    driver.quit() 
-
+driver.quit() 
     return results
