@@ -1,1 +1,1 @@
-web: gunicorn flaskr:create_app
+web: gunicorn myproject.flaskr:create_app
