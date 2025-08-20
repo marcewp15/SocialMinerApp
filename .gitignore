@@ -1,14 +1,23 @@
+#Entorno virtual
 .venv/
+myproyect/
 
+#Python cache
 *.pyc
 __pycache__/
 
+#Configuración de instancia
 instance/
 
+#Pruebas y cobertura
 .pytest_cache/
 .coverage
 htmlcov/
 
+#Distribución y construcción
 dist/
 build/
 *.egg-info/
+
+#Variables de Entorno
+.env
