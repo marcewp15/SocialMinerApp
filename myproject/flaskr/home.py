@@ -186,10 +186,10 @@ df = pd.DataFrame(zip(users, texts, dates)
                   ,columns=['users','texts','dates'])
 df.head()
 
-df.to_excel(r"C:\Users\aleja\Documents\PROYECTO GRADO\resultados.txt", index=False)
+df.to_excel(r"C:\Users\aleja\Documents\PROYECTO GRADO\resultados.xlsx", index=False)
 import os
-os.system('start "excel""C:\Users\aleja\Documents\PROYECTO GRADO" ')
-       
+os.system(r'start excel "C:\Users\aleja\Documents\PROYECTO GRADO\resultados.xlsx"')
+
                 
 ''''
     #Guardar
