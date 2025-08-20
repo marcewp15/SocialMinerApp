@@ -1,3 +1,4 @@
+from unittest import result
 from flask import (
     Blueprint, render_template, request
 )
@@ -12,6 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
+import pandas as pd
 import os
 
 #Carga las variables de entorno
@@ -101,16 +103,15 @@ def search_x(term):
     '''     ''''
     # Seleccionar pagina recientes
     #latest = WebDriverWait(driver, 20).until(
-     #   EC.presence_of_element_located((By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div[2]/nav/div/div[2]/div/div[2]/a/div/div'))
+    #   EC.presence_of_element_located((By.XPATH, '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div[2]/nav/div/div[2]/div/div[2]/a/div/div'))
     #)
     #latest = driver.find_element (By.XPATH,'//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div[2]/nav/div/div[2]/div/div[2]/a/div/div')
     #latest.click()
     #print("[OK] Selección pestaña 'Recientes' abierta.") 
-     '''
+    '''
     # Seleccionar pagina recientes
     latest = WebDriverWait(driver, 20).until(
-           EC.presence_of_element_located((By.XPATH, '//span[contains(text(),"Latest")]/ancestor::a'))
-       )
+        EC.presence_of_element_located((By.XPATH, '//span[contains(text(),"Latest")]/ancestor::a')))
     latest = driver.find_element(By.XPATH, value= '//span[contains(text(),"Latest")]/ancestor::a')
     latest.click()    
     print("[OK] Selección pestaña 'Recientes' abierta.") 
@@ -176,18 +177,15 @@ while True:
     texts2 = list(set(tweets))
     if len(texts2) > 5:
         break
-print(len(users),
-     len(texts),
-     len(dates))
+print(len(users), len(texts), len(dates))
 
-import pandas as pd
 
-df = pd.DataFrame(zip(users, texts, dates)
-                  ,columns=['users','texts','dates'])
+
+df = pd.DataFrame(zip(users, texts, dates),columns=['users','texts','dates'])
 df.head()
 
 df.to_excel(r"C:\Users\aleja\Documents\PROYECTO GRADO\resultados.xlsx", index=False)
-import os
+
 os.system(r'start excel "C:\Users\aleja\Documents\PROYECTO GRADO\resultados.xlsx"')
 
                 
@@ -203,12 +201,12 @@ os.system(r'start excel "C:\Users\aleja\Documents\PROYECTO GRADO\resultados.xlsx
 '''
 
     #WebDriverWait(driver, 10).until(
-     #       EC.presence_of_element_located((By.XPATH, '//div[@data-testid="tweet"]'))
-       # )
+    # #       EC.presence_of_element_located((By.XPATH, '//div[@data-testid="tweet"]'))
+    # # )
     
     #WebDriverWait(driver, 10).until(
-     #       EC.presence_of_element_located((By.XPATH, '//a[@data-testid=loginButton"]'))
-      #  )#
+    #       EC.presence_of_element_located((By.XPATH, '//a[@data-testid=loginButton"]'))
+    #  )#
     
     # Recopilar los resultados de la búsqueda
 ''''
@@ -223,5 +221,6 @@ os.system(r'start excel "C:\Users\aleja\Documents\PROYECTO GRADO\resultados.xlsx
     # Manejar excepciones y errores
 #    print("Error: Elemento no encontrado:", e)
 #finally:
-driver.quit() 
-    return results
+driver.quit()
+
+return result
