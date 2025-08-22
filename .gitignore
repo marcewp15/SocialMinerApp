@@ -1,7 +1,6 @@
 #Entorno virtual
 .venv/
 **/venv/
-myproyect/
 
 #Python cache
 *.pyc
