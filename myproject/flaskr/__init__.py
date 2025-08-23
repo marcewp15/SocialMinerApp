@@ -28,16 +28,10 @@ def create_app(test_config=None):
 
     @app.route('/home')
     def index():
-        if 'user_id' in session:
-            return redirect(url_for('home.index'))
-        else:
-            return redirect(url_for('auth.login'))
+        return redirect(url_for('home.index'))
     
     from . import db
     db.init_app(app)
-
-    from . import auth
-    app.register_blueprint(auth.bp)
 
     from . import home
     app.register_blueprint(home.bp)

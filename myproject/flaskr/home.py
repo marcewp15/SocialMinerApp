@@ -3,7 +3,6 @@ from flask import (
     Blueprint, render_template, request
 )
 
-from .auth import login_required
 from .db import get_db
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys 
@@ -26,7 +25,6 @@ def index():
     return render_template('home/index.html') 
 
 @bp.route('/searcher', methods=('GET', 'POST'))
-@login_required
 def searcher():
     term = request.form['term']
     results = search_x(term)
