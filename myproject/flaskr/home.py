@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 import pandas as pd
 import os
 
+
 #Carga las variables de entorno
 load_dotenv()
 
@@ -41,6 +42,12 @@ def search_x(term):
     # Inicializar el controlador de Chrome
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
+    
+    #Filtar logs de chrome
+    options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    #solo se filtran errores graves 0=ALL, 3=ERROR
+    options.add_argument("--log-level=3",)
+    
     driver = webdriver.Chrome(options=options)
 
     # Abrir Twitter
@@ -55,6 +62,15 @@ def search_x(term):
     buttonHome = driver.find_element(By.XPATH, value="//a[@data-testid='loginButton']")
     buttonHome.click()
     print("[OK] Boton de login encontrado y selecionado.")
+    
+    #En caso de que aparezca la pestaña de bienvenida 
+    ''''
+    buttonCloseWelcome = driver.find_element(By.XPATH, value="//a[@data-testid="loginButton"]")
+    buttonCloseWelcome.click()
+    
+    buttonCloseWelcome = driver.find_element(By.XPATH, value="//button[@data-testid='xMigrationBottomBar']")
+    buttonCloseWelcome.click()
+    '''  
     
     # Iniciar sesion
     input_user = WebDriverWait(driver, 50).until(
@@ -86,18 +102,10 @@ def search_x(term):
     )
     search_box = driver.find_element (By.XPATH, value='//input[@data-testid="SearchBox_Search_Input"]')
     
-    #Escribir el término de búsqueda y presionar Enter
+    #Escribir el palabra de búsqueda y presionar Enter
     search_box.send_keys(term)
     search_box.send_keys(Keys.RETURN)
     print(f"[INFO] Realizando busqueda con la palabra:{term}")
-    
-    ''''
-    buttonCloseWelcome = driver.find_element(By.XPATH, value="//a[@data-testid="loginButton"]")
-    buttonCloseWelcome.click()
-    
-    buttonCloseWelcome = driver.find_element(By.XPATH, value="//button[@data-testid='xMigrationBottomBar']")
-    buttonCloseWelcome.click()
-    '''  
     
     #Seleccionar pagina recientes
     latest = WebDriverWait(driver, 20).until(
@@ -106,31 +114,52 @@ def search_x(term):
     latest.click()    
     print("[OK] Selección pestaña 'Recientes' abierta.") 
     
-    #Seleccionar usuario
+    #Seleccionar tweets con la palabra de busqueda
+    
+    results = []
+    max_tweets = 20
+        
     try:
-        tweets = WebDriverWait(driver,20).until(
-        EC.presence_of_all_elements_located((By.XPATH, '//div[@data-testid="tweetText"]'))
-    )
-        print(f"[INFO] Se encontraron {len(tweets)} tweets.")
+        while len(results) < max_tweets:
+                #Espera a que aparezcan tweets completos
+                tweets = WebDriverWait(driver,20).until(
+                 EC.presence_of_all_elements_located((By.XPATH, '//article[@data-testid="tweet"]'))
+                )
+                print(f"[INFO] Se encontraron {len(tweets)} tweets en pantalla.")
         
-        tweets = driver.find_element(By.XPATH, '//article[@data-testid="tweetText"]')
-    #Recorre cada tweet
-        for tweet in tweets [:10]:
-            try:
-                user = tweet.find_element(By.XPATH, './/div[@data-testid="User-Name"]').text
-                text = tweet.find_element(By.XPATH, './/div[@data-testid="tweetText"]').text
-                date = tweet.find_element(By.XPATH, './/time').get_attribute('datetime')
-        
-                results.append({'user':user, 'text': text, 'date': date})
-            
-            except Exception as e:
-                print("[WARN] No se pudo extraer un tweet:", e)
-                
+                #Recorre cada tweet
+                for tweet in tweets:
+                    if len(results) >= max_tweets:
+                        break
+                    try:
+                        user = tweet.find_element(By.XPATH, './/div[@data-testid="User-Name"]').text
+                        text = tweet.find_element(By.XPATH, './/div[@data-testid="tweetText"]').text
+                        date = tweet.find_element(By.XPATH, './/time').get_attribute('datetime')
+                        
+                        #Evitar duplicados
+                        if not any(r["text"] == text and r["date"] == date for r in results):
+                            results.append({'user':user, 'text': text, 'date': date})
+                    except Exception as e:
+                        print("[WARN] No se pudo extraer un tweet:", e)
+                        
+                #Se genera un scroll para cargar mas tweets
+                if len(results) < max_tweets:
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    time.sleep(2)
+                    
     except Exception as e:
         print("[ERROR] No se encontraron tweets:", e )
     
     
     #Guardar - Recopilar los resultados de la búsqueda
+    
+    df = pd.DataFrame(results)
+    
+    df.to_csv("tweet_resultadospds_txt", sep="\t", index=False, encoding="utf-8")
+    print (f"[OK]{len(results)} RESULTADOS GUARDADOS EN TWEETS_RESULTADOSPDS.TXT")
+    
+    
+    ''''
     try:
         with open("tweets_resultados.txt", "w", encoding="utf-8") as f:
             for r in results:
@@ -138,8 +167,11 @@ def search_x(term):
             print ("[OK] RESULTADOS GUARDADOS EN TWEETS_RESULTADOS.TXT")
     except Exception as e:
         print ("[ERROR] Ocurrio un problema al guardar:", e)
+    '''
+    
             
     #finally:
-        driver.quit()
-        print("[INFO] Navegador cerrado.")
+    driver.quit()
+    print("[INFO] Navegador cerrado.")
+    
     return results
