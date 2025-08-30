@@ -115,9 +115,8 @@ def search_x(term):
     print("[OK] Selección pestaña 'Recientes' abierta.") 
     
     #Seleccionar tweets con la palabra de busqueda
-    
     results = []
-    max_tweets = 20
+    max_tweets = 20 #Cantidad de tweets a seleccionar
         
     try:
         while len(results) < max_tweets:
@@ -142,7 +141,7 @@ def search_x(term):
                     except Exception as e:
                         print("[WARN] No se pudo extraer un tweet:", e)
                         
-                #Se genera un scroll para cargar mas tweets
+                #Se genera un scroll para cargar más tweets
                 if len(results) < max_tweets:
                     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                     time.sleep(2)
@@ -151,13 +150,11 @@ def search_x(term):
         print("[ERROR] No se encontraron tweets:", e )
     
     
-    #Guardar - Recopilar los resultados de la búsqueda
-    
+    #Guardar - los resultados de la búsqueda en archivo .TXT
     df = pd.DataFrame(results)
     
-    df.to_csv("tweet_resultadospds_txt", sep="\t", index=False, encoding="utf-8")
+    df.to_csv('tweet_resultadospds.txt', sep="\t", index=False, encoding="utf-8")
     print (f"[OK]{len(results)} RESULTADOS GUARDADOS EN TWEETS_RESULTADOSPDS.TXT")
-    
     
     ''''
     try:
@@ -168,8 +165,7 @@ def search_x(term):
     except Exception as e:
         print ("[ERROR] Ocurrio un problema al guardar:", e)
     '''
-    
-            
+
     #finally:
     driver.quit()
     print("[INFO] Navegador cerrado.")
