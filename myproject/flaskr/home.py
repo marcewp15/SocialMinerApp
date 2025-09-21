@@ -11,6 +11,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
 from dotenv import load_dotenv
 import pandas as pd
 import os
@@ -63,7 +64,7 @@ def search_x(term):
     buttonHome.click()
     print("[OK] Boton de login encontrado y selecionado.")
     
-    #En caso de que aparezca la pestaña de bienvenida 
+    #En caso de que aparezca la pestaña de bienvenida
     ''''
     buttonCloseWelcome = driver.find_element(By.XPATH, value="//a[@data-testid="loginButton"]")
     buttonCloseWelcome.click()
@@ -138,8 +139,14 @@ def search_x(term):
                         #Evitar duplicados
                         if not any(r["text"] == text and r["date"] == date for r in results):
                             results.append({'user':user, 'text': text, 'date': date})
+                            
+                    #Evita los tweets que contengan imagenes, videos o retweets 
+                    except (StaleElementReferenceException,NoSuchElementException):
+                        print("[WARM] Tweet descartado por stale element")
+                        continue
                     except Exception as e:
                         print("[WARN] No se pudo extraer un tweet:", e)
+                        continue
                         
                 #Se genera un scroll para cargar más tweets
                 if len(results) < max_tweets:
@@ -149,25 +156,16 @@ def search_x(term):
     except Exception as e:
         print("[ERROR] No se encontraron tweets:", e )
     
-    
     #Guardar - los resultados de la búsqueda en archivo .TXT
     df = pd.DataFrame(results)
     
-    df.to_csv('tweet_resultadospds.txt', sep="\t", index=False, encoding="utf-8")
-    print (f"[OK]{len(results)} RESULTADOS GUARDADOS EN TWEETS_RESULTADOSPDS.TXT")
+    df.to_csv('tweets_resultados.txt', sep="\t", index=False, encoding="utf-8")
+    print (f"[OK]{len(results)} RESULTADOS GUARDADOS EN TWEETS_RESULTADOS.TXT")
     
-    ''''
-    try:
-        with open("tweets_resultados.txt", "w", encoding="utf-8") as f:
-            for r in results:
-                f.write(f"usuario: {r['user']}\nfecha:{r['date']}\nTweet: {r['text']}\n\n")
-            print ("[OK] RESULTADOS GUARDADOS EN TWEETS_RESULTADOS.TXT")
-    except Exception as e:
-        print ("[ERROR] Ocurrio un problema al guardar:", e)
-    '''
-
     #finally:
-    driver.quit()
-    print("[INFO] Navegador cerrado.")
-    
+    try:
+        driver.quit()
+        print("[INFO] Navegador cerrado.")
+    except: 
+        print("[WARN] No se pudo cerrar el navegador")
     return results
