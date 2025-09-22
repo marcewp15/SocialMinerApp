@@ -20,8 +20,10 @@ import os
 #Carga las variables de entorno
 load_dotenv()
 
+#Definicion del blueprint 
 bp = Blueprint('home', __name__)
 
+#Ruta principal del blueprint 
 @bp.route('/')
 def index():
     return render_template('home/index.html') 

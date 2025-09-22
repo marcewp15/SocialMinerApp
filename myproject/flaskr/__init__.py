@@ -26,13 +26,16 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    #Ruta inicial - redirige al blueprint
     @app.route('/home')
     def index():
         return redirect(url_for('home.index'))
     
+    #inicializa base de datos
     from . import db
     db.init_app(app)
 
+    #Registra blueprint
     from . import home
     app.register_blueprint(home.bp)
 
