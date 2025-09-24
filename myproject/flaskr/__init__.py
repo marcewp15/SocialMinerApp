@@ -12,7 +12,6 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )
 
-
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
@@ -30,10 +29,6 @@ def create_app(test_config=None):
     @app.route('/home')
     def index():
         return redirect(url_for('home.index'))
-    
-    #inicializa base de datos
-    from . import db
-    db.init_app(app)
 
     #Registra blueprint
     from . import home

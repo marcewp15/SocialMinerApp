@@ -3,7 +3,6 @@ from flask import (
     Blueprint, render_template, request
 )
 
-from .db import get_db
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys 
 import time
@@ -125,7 +124,7 @@ def search_x(term):
         while len(results) < max_tweets:
                 #Espera a que aparezcan tweets completos
                 tweets = WebDriverWait(driver,20).until(
-                 EC.presence_of_all_elements_located((By.XPATH, '//article[@data-testid="tweet"]'))
+                EC.presence_of_all_elements_located((By.XPATH, '//article[@data-testid="tweet"]'))
                 )
                 print(f"[INFO] Se encontraron {len(tweets)} tweets en pantalla.")
         
