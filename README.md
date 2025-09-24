@@ -1,2 +1,2 @@
-# prueba_trabajo_grado
-Pruebas Trabajo de Grado - Tecnología en Construcción de Software
+# Social Miner
+Tecnología en Construcción de Software
