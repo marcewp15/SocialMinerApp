@@ -1,6 +1,6 @@
 from unittest import result
 from flask import (
-    Blueprint, render_template, request
+    Blueprint, render_template, request, send_file
 )
 
 from selenium import webdriver
@@ -58,7 +58,7 @@ def search_x(term):
     driver.execute_script("window.focus();")
     print("[INFO] Pagina de inicio de sesion en X cargada.")
     
-    WebDriverWait(driver, 50).until(
+    WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//a[@data-testid="loginButton"]'))
         )
     buttonHome = driver.find_element(By.XPATH, value="//a[@data-testid='loginButton']")
@@ -75,7 +75,7 @@ def search_x(term):
     '''  
     
     # Iniciar sesion
-    input_user = WebDriverWait(driver, 50).until(
+    input_user = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//input[@name="text"]'))
         )
     input_user = driver.find_element(By.XPATH, '//input[@name="text"]')
@@ -86,7 +86,7 @@ def search_x(term):
     buttonext.click()
     
     #Ingresar contraseña
-    input_pass = WebDriverWait(driver, 50).until(
+    input_pass = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, '//input[@name="password"]'))
     )
     input_pass = driver.find_element (By.XPATH, '//input[@name="password"]')
@@ -170,3 +170,10 @@ def search_x(term):
     except: 
         print("[WARN] No se pudo cerrar el navegador")
     return results
+
+#Boton Exportar
+@bp.route('/download')
+def download_file_pd():
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    path = os.path.join(base_dir, 'tweets_resultados.txt')
+    return send_file(path, as_attachment=True, download_name='tweets_resultados.txt', mimetype='text/plain')
