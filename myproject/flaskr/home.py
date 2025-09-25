@@ -14,6 +14,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 from dotenv import load_dotenv
 import pandas as pd
 import os
+import pygetwindow as gw
 
 
 #Carga las variables de entorno
@@ -31,7 +32,6 @@ def index():
 def searcher():
     term = request.form['term']
     results = search_x(term)
-
     return render_template('home/index.html', results=results)
 
 def search_x(term):
@@ -52,18 +52,24 @@ def search_x(term):
     
     driver = webdriver.Chrome(options=options)
 
-    # Abrir Twitter
+    # Abrir X
     driver.get("https://x.com/")
     driver.maximize_window()
     driver.execute_script("window.focus();")
+    time.sleep(2)
     print("[INFO] Pagina de inicio de sesion en X cargada.")
     
-    WebDriverWait(driver, 50).until(
-            EC.presence_of_element_located((By.XPATH, '//a[@data-testid="loginButton"]'))
-        )
-    buttonHome = driver.find_element(By.XPATH, value="//a[@data-testid='loginButton']")
-    buttonHome.click()
-    print("[OK] Boton de login encontrado y selecionado.")
+    #Configuración vista segundo plano
+    try:
+        win = gw.getWindowsWithTitle("Chrome")[0]
+        win.minimize()
+        print("[INFO] Ventana de Chrome minimizada."
+              )
+    except Exception as e:
+        print("[WARN] No se pudo minimizar la ventana:",e)
+        
+    print("[INFO] Pagina de inicio de sesion x cargada.")
+    
     
     #En caso de que aparezca la pestaña de bienvenida
     ''''
@@ -73,6 +79,14 @@ def search_x(term):
     buttonCloseWelcome = driver.find_element(By.XPATH, value="//button[@data-testid='xMigrationBottomBar']")
     buttonCloseWelcome.click()
     '''  
+    
+    #Ventana de logueo X    
+    WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.XPATH, '//a[@data-testid="loginButton"]'))
+        )
+    buttonHome = driver.find_element(By.XPATH, value="//a[@data-testid='loginButton']")
+    buttonHome.click()
+    print("[OK] Boton de login encontrado y selecionado.")
     
     # Iniciar sesion
     input_user = WebDriverWait(driver, 50).until(
