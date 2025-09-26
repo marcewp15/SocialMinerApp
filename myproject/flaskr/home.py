@@ -68,15 +68,9 @@ def search_x(term):
               )
     except Exception as e:
         print("[WARN] No se pudo minimizar la ventana:",e)
-        
+
     print("[INFO] Pagina de inicio de sesion x cargada.")
     
-    WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//a[@data-testid="loginButton"]'))
-        )
-    buttonHome = driver.find_element(By.XPATH, value="//a[@data-testid='loginButton']")
-    buttonHome.click()
-    print("[OK] Boton de login encontrado y selecionado.")
     
     #En caso de que aparezca la pestaña de bienvenida
     ''''
@@ -88,7 +82,7 @@ def search_x(term):
     '''  
     
     #Ventana de logueo X    
-    WebDriverWait(driver, 30).until(
+    WebDriverWait(driver, 50).until(
             EC.presence_of_element_located((By.XPATH, '//a[@data-testid="loginButton"]'))
         )
     buttonHome = driver.find_element(By.XPATH, value="//a[@data-testid='loginButton']")
@@ -96,7 +90,7 @@ def search_x(term):
     print("[OK] Boton de login encontrado y selecionado.")
     
     # Iniciar sesion
-    input_user = WebDriverWait(driver, 10).until(
+    input_user = WebDriverWait(driver, 50).until(
             EC.presence_of_element_located((By.XPATH, '//input[@name="text"]'))
         )
     input_user = driver.find_element(By.XPATH, '//input[@name="text"]')
@@ -107,7 +101,7 @@ def search_x(term):
     buttonext.click()
     
     #Ingresar contraseña
-    input_pass = WebDriverWait(driver, 10).until(
+    input_pass = WebDriverWait(driver, 50).until(
         EC.presence_of_element_located((By.XPATH, '//input[@name="password"]'))
     )
     input_pass = driver.find_element (By.XPATH, '//input[@name="password"]')
@@ -120,7 +114,7 @@ def search_x(term):
     print("[OK] Sesion iniciada.")
     
     #Encontrar el campo de búsqueda
-    search_box = WebDriverWait(driver,10).until(
+    search_box = WebDriverWait(driver,20).until(
         EC.presence_of_element_located((By.XPATH, '//input[@data-testid="SearchBox_Search_Input"]'))
     )
     search_box = driver.find_element (By.XPATH, value='//input[@data-testid="SearchBox_Search_Input"]')
