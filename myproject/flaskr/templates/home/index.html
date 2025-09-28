@@ -1,16 +1,33 @@
 {% extends 'base.html' %}
+
 {% block header %}
   <h1>{% block title %}SocialMiner Searcher{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-
+<!--Formulario de búsqueda-->
     <form action="/searcher" method="post">
         <input type="text" name="term" placeholder="Ingrese término de búsqueda">
         <button type="submit">Buscar</button>
     </form>
 
-    <form action="/download" method="get">
-    <button type="submit">Exportar txt</button>
-    </form>
+    <!--Ventana con resultados-->
+    {% if results %}
+      <div class="tweet-window" style="border: 1px solid #ccc; padding:10px;margin-top:20px; max-height:300px; overflow-y:scroll;">
+        <h2>Resultados encontrados</h2>
+        <ul>
+          {% for r in results %}
+            <li>
+              <strong>{{ r.user }}</strong> ({{ r.date }})<br>
+              {{ r.text }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      
+      <!--Botón exportar-->
+      <form action="/download" method="get">
+        <button type="submit">Exportar txt</button>
+      </form>
+    {% endif %}
 {% endblock %}

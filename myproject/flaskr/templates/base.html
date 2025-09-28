@@ -1,15 +1,28 @@
 <!doctype html>
-<title>{% block title %}{% endblock %}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<nav>
+
+  <head>
+    <meta charset="uft-8"> <!--Funciona para la codificación de caracteres, para que no salgan simbolos raros-->
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
   
-</nav>
-<section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
-</section>
+  <body>
+    <section class="content">
+      <header>
+        {% block header %}{% endblock %}
+      </header>
+
+      {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+      {% block content %}{% endblock %}
+    </section>
+  </body>
+
+
+
+
+
+
+
+ 

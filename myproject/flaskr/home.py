@@ -26,13 +26,13 @@ bp = Blueprint('home', __name__)
 #Ruta principal del blueprint 
 @bp.route('/')
 def index():
-    return render_template('home/index.html') 
+    return render_template('home/index.html', results=None) 
 
 @bp.route('/searcher', methods=('GET', 'POST'))
 def searcher():
     term = request.form['term']
     results = search_x(term)
-    return render_template('home/index.html', results=results)
+    return render_template('home/index.html', results=results, term=term)
 
 def search_x(term):
     results = []
@@ -59,7 +59,7 @@ def search_x(term):
     time.sleep(2)
     print("[INFO] Pagina de inicio de sesion en X cargada.")
     
-
+    '''
     #Configuración vista segundo plano
     try:
         win = gw.getWindowsWithTitle("Chrome")[0]
@@ -70,7 +70,7 @@ def search_x(term):
         print("[WARN] No se pudo minimizar la ventana:",e)
 
     print("[INFO] Pagina de inicio de sesion x cargada.")
-    
+    '''
     
     #En caso de que aparezca la pestaña de bienvenida
     ''''
