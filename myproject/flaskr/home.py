@@ -14,7 +14,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 from dotenv import load_dotenv
 import pandas as pd
 import os
-import pygetwindow as gw
+import pygetwindow as gw 
 
 
 #Carga las variables de entorno
@@ -64,8 +64,7 @@ def search_x(term):
     try:
         win = gw.getWindowsWithTitle("Chrome")[0]
         win.minimize()
-        print("[INFO] Ventana de Chrome minimizada."
-              )
+        print("[INFO] Ventana de Chrome minimizada.")
     except Exception as e:
         print("[WARN] No se pudo minimizar la ventana:",e)
 
