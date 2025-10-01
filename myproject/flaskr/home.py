@@ -1,6 +1,6 @@
 from unittest import result
 from flask import (
-    Blueprint, render_template, request, send_file
+    Blueprint, render_template, request, send_file, flash, redirect, url_for
 )
 
 from selenium import webdriver
@@ -31,9 +31,15 @@ def index():
 @bp.route('/searcher', methods=('GET', 'POST'))
 def searcher():
     term = request.form['term']
-    results = search_x(term)
-    return render_template('home/index.html', results=results, term=term)
-
+    try:
+        results = search_x(term)
+        if not results:
+            flash("No se encontraron tweets para esta palabra clave", "warning")
+        return render_template('home/index.html', results=results, term=term)
+    except Exception as e:
+        flash(f"Ocurrio un error en la busqueda: {str(e)}","error")
+        return redirect(url_for('home.index(value)'))
+        
 def search_x(term):
     results = []
     print(f"[INFO] Iniciando busqueda en X para la palabra :{term}")
@@ -44,7 +50,6 @@ def search_x(term):
     # Inicializar el controlador de Chrome
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
-    
     #Filtar logs de chrome
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
     #solo se filtran errores graves 0=ALL, 3=ERROR
@@ -172,11 +177,13 @@ def search_x(term):
         print("[ERROR] No se encontraron tweets:", e )
     
     #Guardar - los resultados de la búsqueda en archivo .TXT
-    df = pd.DataFrame(results)
-    
-    df.to_csv('tweets_resultados.txt', sep="\t", index=False, encoding="utf-8")
-    print (f"[OK]{len(results)} RESULTADOS GUARDADOS EN TWEETS_RESULTADOS.TXT")
-    
+    try:
+        df = pd.DataFrame(results)
+        df.to_csv('tweets_resultados.txt', sep="\t", index=False, encoding="utf-8")
+        print (f"[OK]{len(results)} RESULTADOS GUARDADOS EN TWEETS_RESULTADOS.TXT")
+    except Exception:
+        flash("No fue posible exportar los resultados", "error")
+
     #finally:
     try:
         driver.quit()
@@ -186,8 +193,13 @@ def search_x(term):
     return results
 
 #Boton Exportar
-@bp.route('/download')
-def download_file_pd():
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    path = os.path.join(base_dir, 'tweets_resultados.txt')
-    return send_file(path, as_attachment=True, download_name='tweets_resultados.txt', mimetype='text/plain')
+@bp.route('/export')
+def export_file_pd():
+    try:
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        path = os.path.join(base_dir, 'tweets_resultados.txt')
+        return send_file(path, as_attachment=True, download_name='tweets_resultados.txt', mimetype='text/plain')
+    except Exception:
+        flash("No fue posible exportar los resultados," "error")
+        print("[ERROR] Exportación fallida:", e)
+        return redirect(url_for('home.index'))

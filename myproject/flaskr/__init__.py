@@ -1,7 +1,7 @@
 import os
 
 from flask import (
-    Flask, redirect, url_for, session
+    Flask, redirect, url_for, session , render_template
 )
 
 def create_app(test_config=None):
@@ -11,7 +11,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )
-
+    
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
@@ -30,8 +30,23 @@ def create_app(test_config=None):
     def index():
         return redirect(url_for('home.index'))
 
-    #Registra blueprint
+    #Registra/importa blueprint
     from . import home
     app.register_blueprint(home.bp)
-
+    
+    #Manejo de errores app con codigos de estado
+    #Página no encontrada - HU1
+    @app.errorhandler(404) 
+    def pagina_no_encontrada(e):
+        return render_template("error.html", mensaje="La página no está disponible"), 404
+    
+    #Aplicación no disponible/error de servicio - CU1
+    @app.errorhandler(500) 
+    def error_servidor(e):
+        return render_template("error.html", mensaje="La aplicación no está disponible en este momento."), 500
+    
+    @app.errorhandler(503)
+    def servidor_no_disponible(e):
+        return render_template("error.html", mensaje="La aplicación no está disponible en este momento."), 503
+    
     return app
