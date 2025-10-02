@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}SocialMiner Searcher{% endblock %}</h1>
+    <img src="{{ url_for('static', filename='images/socialminer_logo_titulo.png') }}" class="logo" alt="Logo SocialMiner">
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
 
     <!--Ventana con resultados-->
     {% if results %}
-      <div class="tweet-window" style="border: 1px solid #ccc; padding:10px;margin-top:20px; max-height:300px; overflow-y:scroll;">
+      <div class="tweet-window">
         <h2>Resultados encontrados</h2>
         <ul>
           {% for r in results %}
