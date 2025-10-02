@@ -6,39 +6,65 @@
 
 {% block content %}
 <!--Formulario de búsqueda-->
-    <form action="/searcher" method="post">
-        <input type="text" name="term" placeholder="Ingrese término de búsqueda">
-        <button type="submit">Buscar</button>
-    </form>
+  <form action="/searcher" method="post" onsubmit="mostrarAvisos()">
+    <input type="text" name="term" placeholder="Ingrese término de búsqueda">
+    <button type="submit">Buscar</button>
+  </form>
 
-    <!--Ventana con resultados-->
-    {% if results %}
-      <div class="tweet-window" style="border: 1px solid #ccc; padding:10px;margin-top:20px; max-height:300px; overflow-y:scroll;">
-        <h2>Resultados encontrados</h2>
-        <ul>
-          {% for r in results %}
-            <li>
-              <strong>{{ r.user }}</strong> ({{ r.date }})<br>
-              {{ r.text }}
-            </li>
-          {% endfor %}
+  <!--Avisos-->
+  <div id="aviso-buscado" style="display:none; margin-top:10px; color: blue; font-weight:bold;">
+    Buscando resultados, por favor espera...
+  </div>
+
+  <div id="aviso-chrome" style="display:none; margin-top:5px; color:red; font-weight:bold;">
+    Al momento de generar la busqueda se abrira una ventana de Chrome, por favor no la cierre.
+  </div>
+
+  <!--Ventana con resultados-->
+  {% if results %}
+    <script>
+      //ocultar avisos automaticamente cuando se generan resultados
+      document.addEventListener("DOMContentLoaded",function(){
+        document.getElementById("aviso-buscanco").style.display = "none";
+        document.getElementById("aviso-chrome").style.display = "none";
+      });
+    </script>
+
+    <div class="tweet-window" style="border: 1px solid #ccc; padding:10px;margin-top:20px; max-height:300px; overflow-y:scroll;">
+      <h2>Resultados encontrados</h2>
+      <ul>
+        {% for r in results %}
+          <li>
+            <strong>{{ r.user }}</strong> ({{ r.date }})<br>
+            {{ r.text }}
+          </li>
+        {% endfor %}
         </ul>
-      </div>
+    </div>
       
-      <!--Botón exportar-->
-      <form action="//export" method="get">
+    <!--Botón exportar-->
+    <form action="//export" method="get">
         <button type="submit">Exportar</button>
-      </form>
-    {% endif %}
+    </form>
+  {% endif %}
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul class="flashes">
-          {% for category, message in messages %}
-            <li class="{{ category }}">{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+  <!--Mensajes Flash-->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <!--Script-->
+  <script>
+    function mostrarAvisos() {
+      document.getElementById("aviso-buscado").style.display = "block";
+      document.getElementById("aviso-chrome").style.display = "block";
+    }
+  </script>
 
 {% endblock %}

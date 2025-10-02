@@ -38,7 +38,7 @@ def searcher():
         return render_template('home/index.html', results=results, term=term)
     except Exception as e:
         flash(f"Ocurrio un error en la busqueda: {str(e)}","error")
-        return redirect(url_for('home.index(value)'))
+        return redirect(url_for('home.index'))
         
 def search_x(term):
     results = []
@@ -64,8 +64,9 @@ def search_x(term):
     time.sleep(2)
     print("[INFO] Pagina de inicio de sesion en X cargada.")
     
-    '''
+    
     #Configuración vista segundo plano
+    '''
     try:
         win = gw.getWindowsWithTitle("Chrome")[0]
         win.minimize()
@@ -75,7 +76,6 @@ def search_x(term):
 
     print("[INFO] Pagina de inicio de sesion x cargada.")
     '''
-    
     #En caso de que aparezca la pestaña de bienvenida
     ''''
     buttonCloseWelcome = driver.find_element(By.XPATH, value="//a[@data-testid="loginButton"]")
@@ -198,7 +198,12 @@ def export_file_pd():
     try:
         base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         path = os.path.join(base_dir, 'tweets_resultados.txt')
+        
+        if not os.path.exists(path):
+            flash("No hay resultados disponibles para exportar.")
+            return redirect(url_for('home.index(value)'))
         return send_file(path, as_attachment=True, download_name='tweets_resultados.txt', mimetype='text/plain')
+    
     except Exception:
         flash("No fue posible exportar los resultados," "error")
         print("[ERROR] Exportación fallida:", e)
