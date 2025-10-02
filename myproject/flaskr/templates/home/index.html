@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}SocialMiner Searcher{% endblock %}</h1>
+    <img src="{{ url_for('static', filename='images/socialminer_logo_titulo.png') }}" class="logo" alt="Logo SocialMiner">
 {% endblock %}
 
 {% block content %}
@@ -20,25 +20,17 @@
     Al momento de generar la busqueda se abrira una ventana de Chrome, por favor no la cierre.
   </div>
 
-  <!--Ventana con resultados-->
-  {% if results %}
-    <script>
-      //ocultar avisos automaticamente cuando se generan resultados
-      document.addEventListener("DOMContentLoaded",function(){
-        document.getElementById("aviso-buscanco").style.display = "none";
-        document.getElementById("aviso-chrome").style.display = "none";
-      });
-    </script>
-
-    <div class="tweet-window" style="border: 1px solid #ccc; padding:10px;margin-top:20px; max-height:300px; overflow-y:scroll;">
-      <h2>Resultados encontrados</h2>
-      <ul>
-        {% for r in results %}
-          <li>
-            <strong>{{ r.user }}</strong> ({{ r.date }})<br>
-            {{ r.text }}
-          </li>
-        {% endfor %}
+    <!--Ventana con resultados-->
+    {% if results %}
+      <div class="tweet-window" style="border: 1px solid #ccc; padding:10px;margin-top:20px; max-height:300px; overflow-y:scroll;">
+        <h2>Resultados encontrados</h2>
+        <ul>
+          {% for r in results %}
+            <li>
+              <strong>{{ r.user }}</strong> ({{ r.date }})<br>
+              {{ r.text }}
+            </li>
+          {% endfor %}
         </ul>
     </div>
       

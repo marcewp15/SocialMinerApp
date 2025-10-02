@@ -14,7 +14,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 from dotenv import load_dotenv
 import pandas as pd
 import os
-import pygetwindow as gw 
+
 
 
 #Carga las variables de entorno
