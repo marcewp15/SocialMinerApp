@@ -14,6 +14,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 from dotenv import load_dotenv
 import pandas as pd
 import os
+import re
 
 
 
@@ -30,7 +31,11 @@ def index():
 
 @bp.route('/searcher', methods=('GET', 'POST'))
 def searcher():
-    term = request.form['term']
+    term = request.form['term'].strip()
+    
+    if not re.match(r'^[A-Za-zÀ-ÿ\s]+$', term):
+        flash("Solo se permiten letras en la busqueda", "error")
+        return redirect(url_for('home.index'))
     try:
         results = search_x(term)
         if not results:

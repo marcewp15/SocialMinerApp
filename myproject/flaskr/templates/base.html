@@ -12,12 +12,12 @@
       <header>
         {% block header %}{% endblock %}
       </header>
-
       {% for message in get_flashed_messages() %}
         <div class="flash">{{ message }}</div>
       {% endfor %}
       {% block content %}{% endblock %}
     </section>
+
     <footer>
       <p>© 2025 SocialMiner App</p>
       <p>Tecnología en Construcción de Software</p>
@@ -25,5 +25,17 @@
       <p>Universidad Antonio Nariño - Facultad de Ingeniería de Sistemas</p>
       <p>Contacto: mpulido85@uan.edu.co - lsanchez10@uan.edu.co</p>
     </footer>
+
+    <!--Mensajes Flash-->
+    {%with messages = get_flashed_messages(with_categories=true) %}
+      {%if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
   </body>
 

@@ -174,3 +174,20 @@ footer {
     overflow-y: scroll;
     margin-bottom: 20px;  /* Espacio para el botón exportar */
 }
+
+/*mensajes de alerta definidos-flash */
+.alert {   
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.alert.error { 
+    background-color: #f8d7da;
+    color: #e02a3c;
+}
+
+.alert.success {
+    background-color: #d4edda;
+    color: #28a745;
+}

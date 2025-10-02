@@ -7,22 +7,25 @@
 {% block content %}
 <!--Formulario de búsqueda-->
   <form action="/searcher" method="post" onsubmit="mostrarAvisos()">
-    <input type="text" name="term" placeholder="Ingrese término de búsqueda">
+    <input type="text" name="term" placeholder="Ingrese término de búsqueda" pattern="[A-Za-zÀ-ÿ\s]+]" 
+    title="Solo se permiten letras y espacios" required>
     <button type="submit">Buscar</button>
   </form>
 
   <!--Avisos-->
-  <div id="aviso-buscado" style="display:none; margin-top:10px; color: blue; font-weight:bold;">
+  <div id="aviso-buscado" style="display:none; margin-top:10px; color: rgb(52, 206, 90); font-weight:bold; 
+    text-align: center; width: 100%;">
     Buscando resultados, por favor espera...
   </div>
 
-  <div id="aviso-chrome" style="display:none; margin-top:5px; color:red; font-weight:bold;">
+  <div id="aviso-chrome" style="display:none; margin-top:5px; color:rgb(243, 73, 73); font-weight:bold;
+    text-align: center; width: 100%;">
     Al momento de generar la busqueda se abrira una ventana de Chrome, por favor no la cierre.
   </div>
 
-    <!--Ventana con resultados-->
-    {% if results %}
-      <div class="tweet-window" style="border: 1px solid #ccc; padding:10px;margin-top:20px; max-height:300px; overflow-y:scroll;">
+  <!--Ventana con resultados-->
+  {% if results %}
+    <div class="tweet-window" style="border: 1px solid #ccc; padding:10px;margin-top:20px; max-height:300px; overflow-y:scroll;">
         <h2>Resultados encontrados</h2>
         <ul>
           {% for r in results %}
@@ -39,17 +42,6 @@
         <button type="submit">Exportar</button>
     </form>
   {% endif %}
-
-  <!--Mensajes Flash-->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul class="flashes">
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
 
   <!--Script-->
   <script>
