@@ -23,4 +23,4 @@ build/
 .env
 
 #Tweets resultados
-*.txt
+tweets_resultados.txt
