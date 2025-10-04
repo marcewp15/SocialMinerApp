@@ -21,3 +21,6 @@ build/
 
 #Variables de Entorno
 .env
+
+#Tweets resultados
+*.txt
