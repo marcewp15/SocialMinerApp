@@ -17,7 +17,6 @@ import os
 import re
 
 
-
 #Carga las variables de entorno
 load_dotenv()
 
@@ -70,17 +69,6 @@ def search_x(term):
     print("[INFO] Pagina de inicio de sesion en X cargada.")
     
     
-    #Configuración vista segundo plano
-    '''
-    try:
-        win = gw.getWindowsWithTitle("Chrome")[0]
-        win.minimize()
-        print("[INFO] Ventana de Chrome minimizada.")
-    except Exception as e:
-        print("[WARN] No se pudo minimizar la ventana:",e)
-
-    print("[INFO] Pagina de inicio de sesion x cargada.")
-    '''
     #En caso de que aparezca la pestaña de bienvenida
     ''''
     buttonCloseWelcome = driver.find_element(By.XPATH, value="//a[@data-testid="loginButton"]")
