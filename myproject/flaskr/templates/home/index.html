@@ -13,28 +13,29 @@
   </form>
 
   <!--Avisos-->
-  <div id="aviso-buscado" style="display:none; margin-top:10px; color: rgb(52, 206, 90); font-weight:bold; 
-    text-align: center; width: 100%;">
-    Buscando resultados, por favor espere...
-  </div>
+  <div id="aviso-buscado" >Buscando resultados, por favor espere...</div>
+  <div id="aviso-chrome" >Al momento de generar la busqueda se abrira una ventana de Chrome, por favor no la cierre. </div>
 
-  <div id="aviso-chrome" style="display:none; margin-top:5px; color:rgb(243, 73, 73); font-weight:bold;
-    text-align: center; width: 100%;">
-    Al momento de generar la busqueda se abrira una ventana de Chrome, por favor no la cierre.
-  </div>
-
+  <!--Script de avisos-->
+  <script>
+    function mostrarAvisos() {
+      document.getElementById("aviso-buscado").style.display = "block";
+      document.getElementById("aviso-chrome").style.display = "block";
+    }
+  </script>
+  
   <!--Ventana con resultados-->
   {% if results %}
-    <div class="tweet-window" style="border: 1px solid #ccc; padding:10px;margin-top:20px; max-height:300px; overflow-y:scroll;">
+    <div class="tweet-window">
         <h2>Resultados encontrados</h2>
-        <ul>
+        <ol>
           {% for r in results %}
             <li>
               <strong>{{ r.user }}</strong> ({{ r.date }})<br>
               {{ r.text }}
             </li>
           {% endfor %}
-        </ul>
+        </ol>
     </div>
       
     <!--Botón exportar-->
@@ -42,13 +43,4 @@
         <button type="submit">Exportar</button>
     </form>
   {% endif %}
-
-  <!--Script-->
-  <script>
-    function mostrarAvisos() {
-      document.getElementById("aviso-buscado").style.display = "block";
-      document.getElementById("aviso-chrome").style.display = "block";
-    }
-  </script>
-
 {% endblock %}

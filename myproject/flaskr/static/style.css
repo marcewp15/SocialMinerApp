@@ -28,7 +28,6 @@ body {
     font-size: 2.5em;           /* Aumenta el tamaño si quieres un título más grande */
 }
 
-
 a {
     color: #377ba8;
 }
@@ -80,13 +79,6 @@ nav ul li a, nav ul li span, header .action {
 .content > header h1 {
     flex: auto;
     margin: 1rem 0 0.25rem 0;
-}
-
-.flash {
-    margin: 1em 0;
-    padding: 1em;
-    background: #cae6f6;
-    border: 1px solid #377ba8;
 }
 
 .post > header {
@@ -167,7 +159,7 @@ footer {
 }
 
 .tweet-window {
-    border: 1px solid #ccc;
+    border: 1px solid #a2a6cc;
     padding: 10px;
     margin-top: 20px;
     max-height: 180px;    /* Reduce la altura máxima */
@@ -175,19 +167,126 @@ footer {
     margin-bottom: 20px;  /* Espacio para el botón exportar */
 }
 
+.tweet-window h2 {
+    color: rgb(57, 175, 53);
+}
+
+.tweet-window ol {
+    list-style-type: decimal; /* tipo de numeración */
+    padding-left: 30px; /* espacio para los números */
+}
+
+.tweet-window ol li {
+  margin-bottom: 10px; /*separación entre tweets para que no queden pegados*/
+}
+
+/*cambia el color solo del número */
+/*::marker es un pseudo-elemento CSS especial para cambiar el color de los números*/
+ol li::marker {
+  color: rgb(57, 175, 53);
+  font-weight: bold;
+}
+
+/*Avisos de busqueda y espera*/
+/*Se utiliza # porque tenemos definidos dos avisos diferentes con id */
+#aviso-buscado {
+    display: none;
+    margin-top: 10px;
+    color: rgb(53, 120, 175);
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 3px;
+}
+
+#aviso-chrome {
+    display: none;
+    margin-top: 5xp;
+    color: rgb(243, 73, 73);
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
 /*mensajes de alerta definidos-flash */
+.flash-messages{
+    margin: 10xp 0;
+}
+
 .alert {   
     padding: 10px;
     margin: 10px 0;
     border-radius: 5px;
+    margin-bottom: 8px;
+    opacity: 1;
+    animation: fadeOut 5s forwards ease-out; /*animación de 5 segundos*/
+}
+
+/*animación para que los errores desaparezcan y no queden en pantalla*/
+/*@keyframes regla de css para controlar la animación*/
+@keyframes fadeOut {
+    0% { opacity: 1;}
+    100% {
+        opacity: 0;
+        height: 0;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
 }
 
 .alert.error { 
-    background-color: #f8d7da;
-    color: #e02a3c;
+    margin-bottom: 8px;
+    background-color: #fac7c7;
+    color: #eb3131;
+}
+
+.alert.warning {
+    margin-bottom: 8px;
+    background-color: #f8f4be;
+    color: #f5e839;
 }
 
 .alert.success {
+    margin-bottom: 8px;
     background-color: #d4edda;
     color: #28a745;
 }
+
+.alert.info {
+    margin-bottom: 8px;
+    background-color: #abedf8;
+    color: #0c5460;
+}
+
+/*Mensajes de error con los codigos de estado*/
+.error-box{
+    text-align: center;
+    background-color: #fff;
+    border-radius: 12px; /*redondea esquinas*/
+    padding: 40px;
+    width: 80%;
+    max-width: 500px; /*evita que en pantallas grandes se agrande*/
+    margin: 80px auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /*agrega sombra*/
+    border: 2px solid var(--color-error, #ccc); /* color por defecto */
+}
+
+.error-box h1{
+    font-size: 2em; 
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: var(--color-error, #555);
+}
+
+/*se crean variables CSS para que .error.box y .error-box h1 tome los colores 
+definidos para cada error*/
+.error-404 { 
+    --color-error: #f1c40f; /* Amarillo */
+} 
+.error-500 { 
+    --color-error: #e74c3c; /* Rojo */
+} 
+.error-503 { 
+    --color-error: #95a5a6; /* Gris */
+ } 

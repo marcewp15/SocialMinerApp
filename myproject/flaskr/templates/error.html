@@ -1,13 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %} Error {{ codigo if codigo else "" }} {% endblock %}
-
-{% block header %}
-  <h1>Error {{ codigo if codigo else "" }}</h1>
-{% endblock %}
+{% block title %} Error {{ codigo }} {% endblock %}
 
 {% block content %}
   <div class="error-box">
+    <h1> Error {{codigo}}</h1>
     <p>{{ mensaje }}</p>
     <p><a href="{{ url_for('home.index') }}">Volver al inicio</a></p>
   </div>
