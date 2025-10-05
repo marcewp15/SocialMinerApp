@@ -65,7 +65,6 @@ def search_x(term):
     driver.get("https://x.com/")
     driver.maximize_window()
     driver.execute_script("window.focus();")
-    time.sleep(2)
     print("[INFO] Pagina de inicio de sesion en X cargada.")
     
     
@@ -168,6 +167,7 @@ def search_x(term):
                     
     except Exception as e:
         print("[ERROR] No se encontraron tweets:", e )
+        flash("No se encontraron tweets para esta palabra clave", "warning")
     
     #Guardar - los resultados de la búsqueda en archivo .TXT
     try:
@@ -197,7 +197,7 @@ def export_file_pd():
             return redirect(url_for('home.index(value)'))
         return send_file(path, as_attachment=True, download_name='tweets_resultados.txt', mimetype='text/plain')
     
-    except Exception:
-        flash("No fue posible exportar los resultados," "error")
+    except Exception as e:
+        flash("No fue posible exportar los resultados","error")
         print("[ERROR] Exportación fallida:", e)
         return redirect(url_for('home.index'))

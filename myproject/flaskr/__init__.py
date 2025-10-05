@@ -38,16 +38,16 @@ def create_app(test_config=None):
     #Página no encontrada - Manejo de error 404
     @app.errorhandler(404) 
     def pagina_no_encontrada(e):
-        return render_template("error.html", mensaje="La página no está disponible"), 404
+        return render_template("error.html", mensaje="La página no está disponible", codigo=404), 404
     
     #Aplicación no disponible/error de servicio - Manejo de error 500
     @app.errorhandler(500) 
     def error_servidor(e):
-        return render_template("error.html", mensaje="La aplicación no está disponible en este momento."), 500
+        return render_template("error.html", mensaje="La aplicación no está disponible en este momento.",codigo=500), 500
     
     #Servidor no disponible - Manejo de error 503
     @app.errorhandler(503)
     def servidor_no_disponible(e):
-        return render_template("error.html", mensaje="La aplicación no está disponible en este momento."), 503
+        return render_template("error.html", mensaje="La aplicación no está disponible en este momento.",codigo=503), 503
     
     return app
