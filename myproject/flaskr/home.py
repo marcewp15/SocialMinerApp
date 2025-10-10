@@ -4,7 +4,8 @@ from flask import (
 )
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys 
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -16,6 +17,14 @@ import pandas as pd
 import os
 import re
 
+
+# Inicia un servidor X virtual (Xvfb) para simular entorno gráfico y permitir que Chrome funcione sin modo headless en servidores cloud
+os.system("Xvfb :99 -screen 0 1920x1080x24 &")
+os.environ["DISPLAY"] = ":99"
+
+# Configura el servicio para usar chromedriver del sistema
+service = Service("/usr/bin/chromedriver")
+driver = webdriver.Chrome(service=service, options=options)
 
 #Carga las variables de entorno
 load_dotenv()
