@@ -22,10 +22,6 @@ import re
 os.system("Xvfb :99 -screen 0 1920x1080x24 &")
 os.environ["DISPLAY"] = ":99"
 
-# Configura el servicio para usar chromedriver del sistema
-service = Service("/usr/bin/chromedriver")
-driver = webdriver.Chrome(service=service, options=options)
-
 #Carga las variables de entorno
 load_dotenv()
 
@@ -63,12 +59,16 @@ def search_x(term):
     # Inicializar el controlador de Chrome
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
+
+    # Configura el servicio para usar chromedriver del sistema
+    service = Service("/usr/bin/chromedriver")
+
     #Filtar logs de chrome
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
     #solo se filtran errores graves 0=ALL, 3=ERROR
     options.add_argument("--log-level=3",)
     
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(service=service, options=options)
 
     # Abrir X
     driver.get("https://x.com/")
