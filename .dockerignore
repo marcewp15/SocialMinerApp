@@ -1,0 +1,26 @@
+# Ignorar archivos de control de versiones
+.git
+.gitignore
+
+# Ignorar carpetas de entorno virtual
+venv/
+env/
+
+# Ignorar archivos temporales e IDE
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Ignorar archivos de configuración local
+*.env
+.env
+
+# Ignorar carpetas de builds u otros temporales
+build/
+dist/
+*.egg-info/
