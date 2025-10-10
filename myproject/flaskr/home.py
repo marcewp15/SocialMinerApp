@@ -152,7 +152,7 @@ def search_x(term):
     
     #Seleccionar tweets con la palabra de busqueda
     results = []
-    max_tweets = 20 #Cantidad de tweets a seleccionar
+    max_tweets = 10 #Cantidad de tweets a seleccionar
         
     try:
         while len(results) < max_tweets:
