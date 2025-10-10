@@ -1,1 +1,0 @@
-web: gunicorn "myproject.flaskr:create_app()"
