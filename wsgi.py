@@ -1,3 +1,3 @@
-from myproject.flaskr.home import create_app
+from myproject.flaskr import create_app
 
 app = create_app()
