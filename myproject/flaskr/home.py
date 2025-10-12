@@ -5,7 +5,7 @@ from flask import (
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.service import Service
+#from selenium.webdriver.chrome.service import Service
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -14,14 +14,13 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from dotenv import load_dotenv
 import pandas as pd
-import tempfile
+#import tempfile
 import os
 import re
 
-
 # Inicia un servidor X virtual (Xvfb) para simular entorno gráfico y permitir que Chrome funcione sin modo headless en servidores cloud
-os.system("Xvfb :99 -screen 0 1920x1080x24 &")
-os.environ["DISPLAY"] = ":99"
+#os.system("Xvfb :99 -screen 0 1920x1080x24 &")
+#os.environ["DISPLAY"] = ":99"
 
 #Carga las variables de entorno
 load_dotenv()
@@ -61,8 +60,8 @@ def search_x(term):
     options = webdriver.ChromeOptions()
 
     # Crear un directorio temporal único para el perfil de usuario y evitar errores de sesión
-    user_data_dir = tempfile.mkdtemp()
-    options.add_argument(f"--user-data-dir={user_data_dir}")
+    #user_data_dir = tempfile.mkdtemp()
+    #options.add_argument(f"--user-data-dir={user_data_dir}")
 
     options.add_argument("--start-maximized")
     options.add_argument("--no-sandbox")
@@ -72,17 +71,26 @@ def search_x(term):
     options.add_argument("--disable-background-networking")
     options.add_argument("--disable-default-apps")
     options.add_argument("--disable-sync")
-    options.add_argument("--remote-debugging-port=9222")
+    options.add_argument("--enable-unsafe-swiftshader")
+    options.add_argument("--enable-logging")
+    options.add_argument("--v=1")  # Nivel de verbo para logs (1 es básico)
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
+
+    # *Agrega esta línea para los logs*
+    options.set_capability('goog:loggingPrefs', {'browser': 'ALL', 'driver': 'ALL'})
+
+    #options.add_argument("--remote-debugging-port=9222")
 
     # Configura el servicio para usar chromedriver del sistema
-    service = Service("/usr/bin/chromedriver")
+    #service = Service("/usr/bin/chromedriver")
 
     #Filtar logs de chrome
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
     #solo se filtran errores graves 0=ALL, 3=ERROR
     options.add_argument("--log-level=3",)
     
-    driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Chrome(options=options)
 
     # Abrir X
     driver.get("https://x.com/")
@@ -131,6 +139,17 @@ def search_x(term):
     buttonLogin = driver.find_element(By.XPATH, value="//button[@data-testid='LoginForm_Login_Button']")
     buttonLogin.click()
     print("[OK] Sesion iniciada.")
+
+    # Captura y muestra logs de Chrome
+    logs = driver.get_log('browser')
+    for entry in logs:
+        print(f"[CHROME LOG] {entry['level']}: {entry['message']}")
+
+    logs_driver = driver.get_log('driver')
+    for entry in logs_driver:
+        print(f"[CHROME DRIVER LOG] {entry['level']}: {entry['message']}")
+
+
     
     #Encontrar el campo de búsqueda
     search_box = WebDriverWait(driver,20).until(
