@@ -1,40 +1,34 @@
 name: Build and push to ACR
 
 on:
-    push:
+  push:
     branches:
-        - main
+      - main
 
 jobs:
-    build-and-push:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-    uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Login to Azure
-    uses: azure/login@v1
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
-            creds: ${{ secrets.AZURECREDENTIALS }}
+          creds: ${{ secrets.AZURECREDENTIALS }}
 
-    - name: Docker login to Azure Container Registry
+      - name: Docker login to Azure Container Registry
         run: az acr login --name socialminerapp
 
-    - name: Check Dockerfile exists
+      - name: Check Dockerfile exists
         run: |
-        if [ ! -f Dockerfile ]; then
+          if [ ! -f Dockerfile ]; then
             echo "Dockerfile not found!"
             exit 1
-        fi
+          fi
 
-    - name: Set IMAGE_TAG
-        run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
-
-    - name: Build & Push Docker image
+      - name: Build & Push Docker image
         run: |
-        docker build -t socialminerapp.azurecr.io/testdocker:${IMAGE_TAG} .
-        docker push socialminerapp.azurecr.io/testdocker:${IMAGE_TAG}
-
-    - name: Docker logout
-        run: docker logout socialminerapp.azurecr.io
+          docker build -t socialminerapp.azurecr.io/testdocker:latest .
+          docker push socialminerapp.azurecr.io/testdocker:latest
