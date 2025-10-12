@@ -1,3 +1,5 @@
+name: Build and push to ACR
+
 on:
     push:
     branches:
@@ -10,6 +12,7 @@ jobs:
     steps:
     - name: Checkout code
     uses: actions/checkout@v3
+
     - name: Login to Azure
     uses: azure/login@v1
         with:
