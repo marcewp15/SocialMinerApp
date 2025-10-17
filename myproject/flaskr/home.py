@@ -6,7 +6,6 @@ import random
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-#from selenium.webdriver.chrome.service import Service
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -15,13 +14,8 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from dotenv import load_dotenv
 import pandas as pd
-#import tempfile
 import os
 import re
-
-# Inicia un servidor X virtual (Xvfb) para simular entorno gráfico y permitir que Chrome funcione sin modo headless en servidores cloud
-#os.system("Xvfb :99 -screen 0 1920x1080x24 &")
-#os.environ["DISPLAY"] = ":99"
 
 #Carga las variables de entorno
 load_dotenv()
@@ -61,11 +55,8 @@ def search_x(term):
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
 
-    # Crear un directorio temporal único para el perfil de usuario y evitar errores de sesión
-    #user_data_dir = tempfile.mkdtemp()
-    #options.add_argument(f"--user-data-dir={user_data_dir}")
 
-    """
+
     options.add_argument("--start-maximized")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
@@ -80,15 +71,7 @@ def search_x(term):
     options.add_argument("--v=1")  # Nivel de verbo para logs (1 es básico)
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
-    """
 
-    # *Agrega esta línea para los logs*
-    #options.set_capability('goog:loggingPrefs', {'browser': 'ALL', 'driver': 'ALL'})
-
-    #options.add_argument("--remote-debugging-port=9222")
-
-    # Configura el servicio para usar chromedriver del sistema
-    #service = Service("/usr/bin/chromedriver")
 
     #Filtar logs de chrome
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
@@ -100,10 +83,11 @@ def search_x(term):
     driver = webdriver.Chrome(options=options)
 
     # Abrir X
-    #driver.get("https://x.com/")
-    driver.get("https://x.com/i/flow/login")
+    driver.get("https://x.com/login")
     driver.maximize_window()
     driver.execute_script("window.focus();")
+    #driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+    #options.add_argument(f"--user-data-dir={os.path.expanduser('~/selenium_profile')}")
     print("[INFO] Pagina de inicio de sesion en X cargada.")
     
     
@@ -128,7 +112,7 @@ def search_x(term):
     input_user = WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.XPATH, '//input[@name="text"]'))
         )
-    #input_user = driver.find_element(By.XPATH, '//input[@name="text"]')
+    time.sleep(random.uniform(0.5, 2.0))
     input_user.click()
     
     #input_user.send_keys(USERNAME)
@@ -139,29 +123,14 @@ def search_x(term):
     buttonext = driver.find_element (By.XPATH, "//span[contains(text(),'Siguiente')]/ancestor::button")
     time.sleep(random.uniform(*(0.08, 0.18)))
     buttonext.click()
+    print("[OK] Boton de siguiente encontrado y selecionado.")
 
-    """
-    try:
-        buttonext = WebDriverWait(driver,10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[.//span[contains(text(), 'Siguiente')]]"))
-        )
-        buttonext = driver.find_element(By.XPATH, "//button[.//span[contains(text(), 'Siguiente')]]")
-        driver.execute_script("arguments[0].scrollIntoView(true);", buttonext)
-        time.sleep(0.5)
-        buttonext.click()
-        print("[OK] Boton de siguiente encontrado y selecionado.")
-    except Exception as e:
-        print(f"[ERROR] No se pudo hacer clic en 'Siguiente': {e}")
-        #WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-    """
     #Ingresar contraseña
     input_pass = WebDriverWait(driver, 30).until(
         EC.presence_of_element_located((By.XPATH, '//input[@name="password"]'))
     )
-    #input_pass = driver.find_element (By.XPATH, '//input[@name="password"]')
-    #input_pass.send_keys(PASSWORD)
+    time.sleep(random.uniform(0.7, 2.2))
     escribir_lento_actions(driver, input_pass, PASSWORD, False)
-
     print("[OK] Contraseña de usuario ingresada.")
     
     #Boton de logueo 
@@ -170,12 +139,9 @@ def search_x(term):
     buttonLogin.click()
     print("[OK] Sesion iniciada.")
 
-
-    """
     buttonLogin = WebDriverWait(driver, 15).until(
         EC.element_to_be_clickable((By.XPATH, "//button[@data-testid='LoginForm_Login_Button']"))
     )
-    #buttonLogin = driver.find_element(By.XPATH, value="//button[@data-testid='LoginForm_Login_Button']")
     buttonLogin.click()
     print("[OK] Sesion iniciada.")
 
@@ -190,16 +156,17 @@ def search_x(term):
     logs_driver = driver.get_log('driver')
     for entry in logs_driver:
         print(f"[CHROME DRIVER LOG] {entry['level']}: {entry['message']}")
-    """
-    
+        
     #Encontrar el campo de búsqueda
-    """ search_box = WebDriverWait(driver,20).until(
+    search_box = WebDriverWait(driver,20).until(
         EC.presence_of_element_located((By.XPATH, '//input[@data-testid="SearchBox_Search_Input"]'))
     )
     search_box = driver.find_element (By.XPATH, value='//input[@data-testid="SearchBox_Search_Input"]')
+    time.sleep(random.uniform(0.9, 2.3))
     
     #Escribir el palabra de búsqueda y presionar Enter
     search_box.send_keys(term)
+    time.sleep(random.uniform(0.3, 1.0))
     search_box.send_keys(Keys.RETURN)
     print(f"[INFO] Realizando busqueda con la palabra:{term}")
     
@@ -212,8 +179,8 @@ def search_x(term):
     
     #Seleccionar tweets con la palabra de busqueda
     results = []
-    max_tweets = 10 #Cantidad de tweets a seleccionar
-        
+    max_tweets = random.randint(15, 25)
+    
     try:
         while len(results) < max_tweets:
                 #Espera a que aparezcan tweets completos
@@ -246,7 +213,7 @@ def search_x(term):
                 #Se genera un scroll para cargar más tweets
                 if len(results) < max_tweets:
                     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                    time.sleep(2)
+                    time.sleep(random.uniform(1.5, 3.7))
                     
     except Exception as e:
         print("[ERROR] No se encontraron tweets:", e )
@@ -266,7 +233,7 @@ def search_x(term):
         print("[INFO] Navegador cerrado.")
     except: 
         print("[WARN] No se pudo cerrar el navegador")
-    return results """
+    return results 
 
 #Boton Exportar
 @bp.route('/export')
@@ -301,5 +268,3 @@ def escribir_lento_actions(driver, elemento, texto, limpiar=True, delay=(0.08, 0
         actions.send_keys_to_element(elemento, ch).pause(random.uniform(*delay))
         actions.perform()
 
-# --- Ejemplo de uso ---
-# escribir_lento_actions(driver, input_box, "Hola mundo", limpiar=True, delay=(0.06, 0.14))
