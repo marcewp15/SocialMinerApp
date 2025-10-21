@@ -145,7 +145,7 @@ Incluye en el Dockerfile la instalación de dependencias y la configuración de 
 
 # Licencia
 
-Este proyecto se distribuye bajo la licencia MIT (o la que corresponda). Sustituye con la licencia elegida.
+Este proyecto se distribuye bajo la licencia MIT
 
 
 
