@@ -5,8 +5,6 @@ from flask import (
 import random, os, re, time, pandas as pd
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -42,56 +40,21 @@ def searcher():
         flash(f"Ocurrio un error en la busqueda: {str(e)}","error")
         return redirect(url_for('home.index'))
 
-def inicio_driver():
-    try:
-        options = webdriver.ChromeOptions()
-        
-        profile_path = os.path.expanduser("~/selenium_profile_X")
-        os.makedirs(profile_path, exist_ok=True)
-        options.add_argument(f"--user-data-dir={profile_path}")
-        options.add_argument("--profile-directory=Profile 1")
-        
-        options.add_argument("--disable-blink-features=AutomationControlled")
-        options.add_argument("--disable-infobars")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--disable-notifications")
-        options.add_argument("--disable-extensions")
-        options.add_argument("--log-level=3")
-        options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        options.add_experimental_option('useAutomationExtension', False)
+""" PROXIES = [
+    "45.77.11.110:8080",
+    "103.216.82.19:6667",
+    "134.209.29.120:3128",
+    "51.158.68.68:8811"
+]
 
-        #Cambiar User-Agent aleatoriamente
-        UA = [
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
-        ]
-        options.add_argument(f"--user-agent={random.choice(UA)}")
-
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        time.sleep(random.uniform(1.5, 3.5))
-        print("[OK] Navegador iniciado correctamente con perfil dedicado.")
-        return driver
+#Cambiar User-Agent aleatoriamente
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+    ] """
     
-    except Exception as e:
-        print(f"[ERROR] Error al iniciar el navegador: {e}")
-        return None
-    
-    """  driver = webdriver.Chrome(options=options)
-    driver.maximize_window() """
-    
-    #Ocultar el atributo webdriver
-    """  driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-        "source": 
-        Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-        Object.defineProperty(navigator, 'languages', { get: () => ['es-ES', 'es'] });
-        Object.defineProperty(navigator, 'platform', { get: () => 'Win32' });
-        Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4] });
-    
-    }) 
-    return driver """
 
 #Automatización principal
 def search_x(term):
@@ -100,8 +63,12 @@ def search_x(term):
     results = []
     print(f"[INFO] Iniciando busqueda en X para la palabra :{term}")
     
+    """ proxy = random.choice(PROXIES)
+    ua = random.choice(USER_AGENTS)
+    print(f"[INFO] Usando proxy: {proxy}")
+    print(f"[INFO] Usando User-Agent: {ua}") """
     
-    """# Inicializar el controlador de Chrome
+    # Inicializar el controlador de Chrome
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
     options.add_argument("--no-sandbox")
@@ -109,57 +76,31 @@ def search_x(term):
     options.add_argument("--disable-features=VizDisplayCompositor")
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-extensions")
-    #options.add_argument("--disable-background-networking")
-    #options.add_argument("--disable-default-apps")
+    options.add_argument("--disable-background-networking")
+    options.add_argument("--disable-default-apps")
     options.add_argument("--disable-sync")
     options.add_argument("--enable-unsafe-swiftshader")
-    #options.add_argument("--enable-logging")
+    options.add_argument("--enable-logging")
+    #options.add_argument(f"--proxy-server=http://{proxy}")
+    #options.add_argument(f"--user-agent={ua}")
     options.add_argument("--v=1")  # Nivel de verbo para logs (1 es básico)
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
-
-    #Filtar logs de chrome
-    options.add_experimental_option("excludeSwitches", ["enable-logging"])
-    #solo se filtran errores graves 0=ALL, 3=ERROR
-    options.add_argument("--log-level=3",)
-     """
-
+    options.add_experimental_option("excludeSwitches", ["enable-logging"]) #Filtar logs de chrome
+    options.add_argument("--log-level=3",) #solo se filtran errores graves 0=ALL, 3=ERROR
+    
     # Abrir X
-    driver = inicio_driver()
-    driver.get("https://x.com/login")
-    
-    #driver.execute_script("window.focus();")
-    #driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-    #options.add_argument(f"--user-data-dir={os.path.expanduser('~/selenium_profile')}")
-    pausa_humana = (2, 5)
+    driver = webdriver.Chrome(options=options)
+    driver.get("https://x.com/login") 
+    driver.maximize_window()
+    driver.execute_script("window.focus();")
     print("[INFO] Pagina de inicio de sesion en X cargada.")
+
+    """ 
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+    options.add_argument(f"--user-data-dir={os.path.expanduser('~/selenium_profile')}") """
     
-    try:
-        # Iniciar sesion
-        input_user = WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.XPATH, '//input[@name="text"]'))
-        )
-        escribir_lento_actions(driver, input_user, USERNAME)
-        pausa_humana(1.0, 2.3)
-        
-        buttonext = driver.find_element (By.XPATH, "//span[contains(text(),'Siguiente')]/ancestor::button")
-        buttonext.click()
-        pausa_humana(1.2, 2.8)
-        
-        input_pass = WebDriverWait(driver, 20).until(
-        EC.presence_of_element_located((By.XPATH, '//input[@name="password"]'))
-        )
-        escribir_lento_actions(driver, input_pass, PASSWORD)
-        pausa_humana(1.0, 2.2)
-        
-        buttonLogin = driver.find_element(By.XPATH, value="//button[@data-testid='LoginForm_Login_Button']")
-        buttonLogin.click()
-        pausa_humana(2.5, 4.0)
-        print("[OK] Sesión iniciada")
-    except Exception:
-        print("[INFO] Sesión ya iniciada o paso de login omitido.")
-    
-    #En caso de que aparezca la pestaña de bienvenida
+    #pestaña de bienvenida
     ''''
     buttonCloseWelcome = driver.find_element(By.XPATH, value="//a[@data-testid="loginButton"]")
     buttonCloseWelcome.click()
@@ -177,7 +118,7 @@ def search_x(term):
     print("[OK] Boton de login encontrado y selecionado.") """
     
     # Iniciar sesion
-    """ input_user = WebDriverWait(driver, 30).until(
+    input_user = WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.XPATH, '//input[@name="text"]'))
         )
     time.sleep(random.uniform(0.5, 2.0))
@@ -185,24 +126,24 @@ def search_x(term):
     
     #input_user.send_keys(USERNAME)
     escribir_lento_actions(driver, input_user, USERNAME, False)
-    print("[OK] Cuenta usuario ingresado.") """
+    print("[OK] Cuenta usuario ingresado.")
     
     #buttonext = driver.find_element (By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/button[2]')
-    """ buttonext = driver.find_element (By.XPATH, "//span[contains(text(),'Siguiente')]/ancestor::button")
+    buttonext = driver.find_element (By.XPATH, "//span[contains(text(),'Siguiente')]/ancestor::button")
     time.sleep(random.uniform(*(0.08, 0.18)))
     buttonext.click()
     print("[OK] Boton de siguiente encontrado y selecionado.")
-    """
+   
     #Ingresar contraseña
-    """ input_pass = WebDriverWait(driver, 30).until(
+    input_pass = WebDriverWait(driver, 30).until(
         EC.presence_of_element_located((By.XPATH, '//input[@name="password"]'))
     )
     time.sleep(random.uniform(0.7, 2.2))
     escribir_lento_actions(driver, input_pass, PASSWORD, False)
-    print("[OK] Contraseña de usuario ingresada.") """
+    print("[OK] Contraseña de usuario ingresada.")
     
     #Boton de logueo 
-    """ buttonLogin = driver.find_element(By.XPATH, value="//button[@data-testid='LoginForm_Login_Button']")
+    buttonLogin = driver.find_element(By.XPATH, value="//button[@data-testid='LoginForm_Login_Button']")
     time.sleep(random.uniform(*(0.08, 0.18)))
     buttonLogin.click()
     print("[OK] Sesion iniciada.")
@@ -211,7 +152,7 @@ def search_x(term):
         EC.element_to_be_clickable((By.XPATH, "//button[@data-testid='LoginForm_Login_Button']"))
     )
     buttonLogin.click()
-    print("[OK] Sesion iniciada.") """
+    print("[OK] Sesion iniciada.")
 
     # Captura y muestra logs de Chrome
     """  try:
@@ -230,33 +171,21 @@ def search_x(term):
         EC.presence_of_element_located((By.XPATH, '//input[@data-testid="SearchBox_Search_Input"]'))
     )
     escribir_lento_actions(driver, search_box, term)
-    #search_box = driver.find_element (By.XPATH, value='//input[@data-testid="SearchBox_Search_Input"]')
-    #time.sleep(random.uniform(0.9, 2.3))
+    search_box = driver.find_element (By.XPATH, value='//input[@data-testid="SearchBox_Search_Input"]')
+    time.sleep(random.uniform(0.9, 2.3))
     
     #Escribir el palabra de búsqueda y presionar Enter
-    #search_box.send_keys(term)
-    #time.sleep(random.uniform(0.3, 1.0))
+    search_box.send_keys(term)
+    time.sleep(random.uniform(0.3, 1.0))
     search_box.send_keys(Keys.RETURN)
-    pausa_humana(2.0, 4.0)
     print(f"[INFO] Realizando busqueda con la palabra:{term}")
     
     #Seleccionar pagina recientes
-    """  latest = WebDriverWait(driver, 20).until(
+    latest = WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.XPATH, '//span[contains(text(),"Latest")]/ancestor::a')))
     latest = driver.find_element(By.XPATH, value= '//span[contains(text(),"Latest")]/ancestor::a')
     latest.click()    
-    print("[OK] Selección pestaña 'Recientes' abierta.")  """
-    
-    try:
-        latest = WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.XPATH, '//span[contains(text(),"Latest")]/ancestor::a'))
-        )
-        latest.click()
-        pausa_humana(2.0, 4.0)
-        print("[OK] Selección pestaña 'Recientes' abierta.")
-        
-    except Exception:
-        print("[WARN] No se encontró pestaña 'Recientes'.")
+    print("[OK] Selección pestaña 'Recientes' abierta.")
 
         
     #Seleccionar tweets con la palabra de busqueda
@@ -317,33 +246,6 @@ def search_x(term):
         print("[WARN] No se pudo cerrar el navegador")
     return results 
 
-#funciones de apoyo
-""" def pausa_humana(a=0.5, b=2.5):
-    #Simula pausas humanas.
-    time.sleep(random.uniform(a, b))
-
-def escribir_lento_actions(driver, elemento, texto, limpiar=True, delay=(0.05, 0.25)):
-    #Simula escritura humana, con posibles errores.
-    actions = ActionChains(driver)
-    elemento.click()
-    if limpiar:
-        try:
-            elemento.clear()
-        except:
-            pass
-    for i, ch in enumerate(texto):
-        actions.send_keys_to_element(elemento, ch).perform()
-        time.sleep(random.uniform(*delay))
-        if random.random() < 0.03 and i > 2:  # Simula errores
-            actions.send_keys(Keys.BACKSPACE).perform()
-            pausa_humana(0.1, 0.4)
-
-def scroll_humano(driver, pasos=3):
-    #Realiza desplazamientos naturales.
-    for _ in range(pasos):
-        driver.execute_script("window.scrollBy(0, window.innerHeight / 2);")
-        pausa_humana(0.8, 2.0)
-         """
 
 #Boton Exportar
 @bp.route('/export')
