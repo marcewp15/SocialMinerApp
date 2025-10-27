@@ -1,9 +1,10 @@
 import unittest
 import sys, os
 from unittest.mock import patch
-from flaskr import create_app
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from flaskr import create_app
 
 class TestExportRoute(unittest.TestCase):
     def setUp(self):
@@ -14,6 +15,7 @@ class TestExportRoute(unittest.TestCase):
     @patch('os.path.exists', return_value=False)
     def test_export_sin_resultados(self,mock_exist):
         response = self.client.get('/export', follow_redirects=True)
+        
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'No hay resultados disponibles para exportar', response.data)
     
@@ -24,14 +26,17 @@ class TestExportRoute(unittest.TestCase):
            "contenido simulado", status=200, headers={"content-Disposition":"attachment; filename=tweets_resultados.txt"})
         mock_send_file.return_value = mock_response
         response = self.client.get('/export')
+        
         self.assertAlmostEqual(response.status_code,200)
         mock_send_file.assert_called_once()
+        
         content_disposition = response.headers.get("content-Disposition")
         self.assertIn("tweets_resultados.txt", content_disposition)
     
     @patch('os.path.exists', side_effect=Exception('Error simulado'))
     def test_export_error_exception(self, mock_exist):
         response = self.client.get('/export', follow_redirects=True)
+        
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'No fue posible exportar los resultados', response.data)
 

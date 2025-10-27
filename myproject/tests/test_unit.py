@@ -1,8 +1,9 @@
 import unittest
 import sys, os
-from flaskr import create_app
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from flaskr import create_app
 
 class UnitTest(unittest.TestCase):
     def setUp(self):

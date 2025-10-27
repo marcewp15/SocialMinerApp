@@ -219,7 +219,7 @@ ol li::marker {
     border-radius: 5px;
     margin-bottom: 8px;
     opacity: 1;
-    /*animation: fadeOut 5s forwards ease-out; /*animación de 5 segundos*/
+    animation: fadeOut 15s forwards ease-out; /*animación de 15 segundos*/
 }
 
 /*animación para que los errores desaparezcan y no queden en pantalla*/

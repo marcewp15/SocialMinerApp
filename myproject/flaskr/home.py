@@ -40,33 +40,13 @@ def searcher():
         flash(f"Ocurrio un error en la busqueda: {str(e)}","error")
         return redirect(url_for('home.index'))
 
-""" PROXIES = [
-    "45.77.11.110:8080",
-    "103.216.82.19:6667",
-    "134.209.29.120:3128",
-    "51.158.68.68:8811"
-]
-
-#Cambiar User-Agent aleatoriamente
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
-    ] """
-    
-
 #Automatización principal
 def search_x(term):
     USERNAME = os.getenv("TWITTER_USERNAME")
     PASSWORD = os.getenv("TWITTER_PASSWORD")
     results = []
     print(f"[INFO] Iniciando busqueda en X para la palabra :{term}")
-    
-    """ proxy = random.choice(PROXIES)
-    ua = random.choice(USER_AGENTS)
-    print(f"[INFO] Usando proxy: {proxy}")
-    print(f"[INFO] Usando User-Agent: {ua}") """
+
     
     # Inicializar el controlador de Chrome
     options = webdriver.ChromeOptions()
@@ -81,8 +61,6 @@ def search_x(term):
     options.add_argument("--disable-sync")
     options.add_argument("--enable-unsafe-swiftshader")
     options.add_argument("--enable-logging")
-    #options.add_argument(f"--proxy-server=http://{proxy}")
-    #options.add_argument(f"--user-agent={ua}")
     options.add_argument("--v=1")  # Nivel de verbo para logs (1 es básico)
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
